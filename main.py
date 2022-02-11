@@ -14,7 +14,9 @@ def saveJson():
     with open('client_json_data.json', 'w') as outfile:
         json.dump(myDict1, outfile)
     with open('wix_json_data.json', 'w') as outfile:
-        json.dump(myDict1, outfile)
+        json.dump(myDict2, outfile)
+    with open('client2_json_data.json', 'w') as outfile:
+        json.dump(myDict3, outfile)
 
 
 def read_csv(filename):
@@ -26,6 +28,7 @@ def read_csv(filename):
 
 myDict1 = read_csv("files/1-client-csv.csv")
 myDict2 = read_csv("files/Wix_Templates_Products_CSV (1).csv")
+myDict3 = read_csv("files/2-client-csv.csv")
 
 
 # saveJson()
@@ -70,12 +73,17 @@ def generateNewCSVDictionary():
             prodSizes = getProductsSize(dict=myDict1, flag=key['Style'])
             prodColours = getProductsColor(dict=myDict1, flag=key['Style'])
 
+            collections = ''
+            for mKey in myDict3:
+                if mKey['Style'] == key['Style']:
+                    collections = mKey['ProductRange'] + ';' + mKey['ProductGroup']
+
             newRowObj['handleId'] = key['Style']
             newRowObj['fieldType'] = 'Product'
             newRowObj['name'] = key['Style'] + '-' + key['Desc']
             newRowObj['description'] = buildDescription(key)
             newRowObj['productImageUrl'] = key['Image_Path']
-            newRowObj['price'] = key['Price'] if key['Price'] else 0.0
+            newRowObj['price'] = float(key['Price'])*2 if key['Price'] else 0.0
             newRowObj["surcharge"] = 0.0
             newRowObj['visible'] = 'TRUE'
             newRowObj['inventory'] = 'InStock'
@@ -86,7 +94,7 @@ def generateNewCSVDictionary():
             newRowObj['productOptionName2'] = 'Color'
             newRowObj['productOptionType2'] = "DROP_DOWN"
             newRowObj['productOptionDescription2'] = ';'.join(set(prodColours))
-            newRowObj["collection"] = ''
+            newRowObj["collection"] = collections
             newRowObj["sku"] = ''
             newRowObj["ribbon"] = ''
             newRowObj["discountMode"] = ''
@@ -129,7 +137,7 @@ def generateNewCSVDictionary():
                 newRowObj['name'] = ''
                 newRowObj['description'] = buildDescription(key)
                 newRowObj['productImageUrl'] = key['Image_Path']
-                newRowObj['price'] = key['Price'] if key['Price'] else 0.0
+                newRowObj['price'] = ''
                 newRowObj["surcharge"] = 0.0
                 newRowObj['visible'] = 'TRUE'
                 newRowObj['inventory'] = 'InStock'
@@ -181,7 +189,7 @@ def generateNewCSVDictionary():
             newRowObj['name'] = ''
             newRowObj['description'] = buildDescription(key)
             newRowObj['productImageUrl'] = key['Image_Path']
-            newRowObj['price'] = key['Price'] if key['Price'] else 0.0
+            newRowObj['price'] = ''
             newRowObj["surcharge"] = 0.0
             newRowObj['visible'] = 'TRUE'
             newRowObj['inventory'] = 'InStock'
@@ -260,6 +268,10 @@ def dictionaryToCSV():
                 writer.writerow(data)
     except IOError:
         print("I/O error")
+
+
+# def removeRedundentRows():
+#     pqr = ['B027', 'PS11', 'B013', 'HB10', 'T601', 'B029', 'PS12', 'HA16', 'PS89', 'PW47', 'PW01', 'HV55', 'CV03', 'PW02', 'PW13', 'PW38', 'CV04', 'B028', 'PW33', 'PS53', 'PS56', 'PW11', 'B023', 'PS50', 'PW52', 'C701', 'PW15', 'PW14', 'PV60', 'PS54', 'PV64', 'PW32', 'HA20', 'CS20', 'HA10']
 
 
 dictionaryToCSV()
