@@ -26,6 +26,7 @@ collDict = read_csv("new-files/collections.csv")
 # saveJson()
 all_sizes = []
 
+
 def getProductsSize(dict, flag):
     filtered = []
     pdo1 = []
@@ -292,7 +293,7 @@ def generateNewCSVDictionary():
 def dictionaryToCSV():
     finalCSVDictionary = generateNewCSVDictionary()
 
-    csv_file = "new-files/final_data.csv"
+    csv_file = "new-files/final_data2.csv"
 
     csv_columns = ["handleId", "fieldType", "name", "description", "productImageUrl", "price", "surcharge", "visible",
                    "inventory", "weight", "collection", "sku", "ribbon", "discountMode", "discountValue",
@@ -309,10 +310,10 @@ def dictionaryToCSV():
                    "customTextField1", "customTextCharLimit1", "customTextMandatory1", "brand"]
 
     try:
-        with open(csv_file, 'w', encoding="utf8") as csvFile:
+        with open(csv_file, 'w', newline='', encoding="utf8") as csvFile:
             writer = csv.DictWriter(csvFile, fieldnames=csv_columns)
             writer.writeheader()
-            for data in finalCSVDictionary:
+            for data in finalCSVDictionary[5146:]:
                 writer.writerow(data)
     except IOError:
         print("I/O error")
